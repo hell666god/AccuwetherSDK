@@ -19,6 +19,6 @@
     }
   ],
   "autoload": {
-    "psr-4": { "Weather\\": "weather/src/" }
+    "psr-4": { "Weather\\": "src/" }
   }
 }
