@@ -70,7 +70,7 @@ class Weather
      * @var string
      */
     private $metric_param = '&metric=';
-    
+
     /**
      * Weather constructor.
      */
