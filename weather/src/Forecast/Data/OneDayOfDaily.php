@@ -5,14 +5,14 @@
  * Date: 30.10.2018
  * Time: 19:19
  */
-namespace Weather;
+namespace Forecast\Data;
 
-class WeatherData
+class OneDayOfDaily
 {
     private $weather_data;
 
     /**
-     * WeatherData constructor.
+     * OneDayOfDaily constructor.
      * @param $weather_data
      */
     public function __construct(array $weather_data){
