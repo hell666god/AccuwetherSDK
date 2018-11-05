@@ -14,7 +14,7 @@ use Forecast\Data\TenDayOfDaily;
 require "weather_config.php";
 
 
-class Weather
+class Forecast
 {
     /**
      * @var int
@@ -72,22 +72,45 @@ class Weather
     private $metric_param = '&metric=';
 
     /**
-     * Weather constructor.
+     * Forecast constructor.
      * Set parameters of config.php
      */
-    public function __construct()
-    {
+    public function __construct(){
         $this->city_code = CITY_CODE;
         $this->key = WEATHER_KEY;
         $this->lang = LANG;
         $this->metric = METRIC;
     }
 
+    /**
+     * @param int $city_code
+     */
+    public function setCityCode(int $city_code): void
+    {
+        $this->city_code = $city_code;
+    }
+
+    /**
+     * @param string $lang
+     */
+    public function setLang(string $lang): void
+    {
+        $this->lang = $lang;
+    }
+
+    /**
+     * @param string $metric
+     */
+    public function setMetric(string $metric): void
+    {
+        $this->metric = $metric;
+    }
+
 
     /**
      * @return OneDayOfDaily
      */
-    public function oneDay( ){
+    public function oneDay( ): OneDayOfDaily{
         $url = $this->createURL($this -> url_one_day);
         return new OneDayOfDaily( $this->execUrl($url) );
     }
@@ -96,7 +119,7 @@ class Weather
     /**
      * @return FiveDayOfDaily
      */
-    public function fiveDay(){
+    public function fiveDay(): FiveDayOfDaily{
         $url = $this->createURL($this->url_five_day);
         return new FiveDayOfDaily( $this->execUrl($url) );
     }
@@ -104,7 +127,7 @@ class Weather
     /**
      * @return TenDayOfDaily
      */
-    public function tenDay(){
+    public function tenDay(): TenDayOfDaily{
         $url = $this->createURL($this->url_ten_day);
         return new TenDayOfDaily( $this->execUrl($url) );
     }
@@ -112,18 +135,18 @@ class Weather
     /**
      * @return FifteenDayOfDaily
      */
-    public function fifteenDay(){
+    public function fifteenDay(): FifteenDayOfDaily{
         $url = $this->createURL($this->url_fifteen_day);
         return new FifteenDayOfDaily( $this->execUrl($url) );
     }
 
     /**
      * @param $url
-     * @return null|string
+     * @return string
      */
-    private function createURL($url){
+    private function createURL($url): string{
         if (!$this -> key){
-            return null;
+            throw new \RuntimeException("Key must be not void!");
         }else{
             $url .= $this->city_code . $this->key_param . $this -> key;
         }
@@ -143,7 +166,38 @@ class Weather
      * @param $url
      * @return mixed
      */
-    private function execUrl($url){
-        return json_decode(file_get_contents($url), true);
+    private function execUrl($url): array{
+        $ch = curl_init();
+        $options = array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => false,
+        );
+        curl_setopt_array($ch, $options);
+        $result = curl_exec($ch);
+        $this->isValid(curl_getinfo($ch, CURLINFO_HTTP_CODE));
+        curl_close($ch);
+        return $result;
+    }
+
+    /**
+     * @param $http_code
+     */
+    private function isValid($http_code): void{
+        if ($http_code === 400){
+            throw new \RuntimeException('Request had bad syntax or the parameters supplied were invalid');
+        }
+        if ($http_code === 401){
+            throw new \RuntimeException('Unauthorized. API authorization failed');
+        }
+        if ($http_code === 403){
+            throw new \RuntimeException('Unauthorized. You do not have permission to access this endpoint');
+        }
+        if ($http_code === 404){
+            throw new \RuntimeException('Server has not found a route matching the given URI');
+        }
+        if ($http_code === 500){
+            throw new \RuntimeException('Server encountered an unexpected condition which prevented it from fulfilling the request');
+        }
     }
 }

@@ -27,11 +27,11 @@ class OneDayOfDaily
         return $this->weather_data["DailyForecasts"][0]["Temperature"]["Minimum"]["Value"];
     }
 
-    public function getDayIcon(){
+    public function getDayIconNumber(){
         return $this->weather_data["DailyForecasts"][0]["Day"]["Icon"];
     }
 
-    public function getNightIcon(){
+    public function getNightIconNumber(){
         return $this->weather_data["DailyForecasts"][0]["Night"]["Icon"];
     }
 
