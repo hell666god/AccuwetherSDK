@@ -11,7 +11,7 @@ use Forecast\Data\FiveDayOfDaily;
 use Forecast\Data\OneDayOfDaily;
 use Forecast\Data\TenDayOfDaily;
 
-require "weather_config.php";
+require "../weather_config.php";
 
 
 class Forecast
