@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Forecast\\":"weather/src"
+      "Forecast\\":"weather/src/Forecast"
     }
   }
 }
