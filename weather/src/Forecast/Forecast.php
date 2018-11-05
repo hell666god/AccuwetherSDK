@@ -11,8 +11,7 @@ use Forecast\Data\FiveDayOfDaily;
 use Forecast\Data\OneDayOfDaily;
 use Forecast\Data\TenDayOfDaily;
 
-require "../weather_config.php";
-
+require __DIR__ .DIRECTORY_SEPARATOR . "..". DIRECTORY_SEPARATOR . "weather_config.php"; DI
 
 class Forecast
 {
