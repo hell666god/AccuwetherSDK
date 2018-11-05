@@ -73,6 +73,7 @@ class Weather
 
     /**
      * Weather constructor.
+     * Set parameters of config.php
      */
     public function __construct()
     {
